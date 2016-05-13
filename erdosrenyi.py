@@ -7,4 +7,7 @@ for i in range(0,n):
         for j in range(i+1,n):
                 if (random.random() < p):
                         graph.append((i,j))
-writefile.write(str(graph))
+writestr = ""
+for i in range(len(graph)):
+        writestr += ' '.join(map(str,(graph[i]))) + "\n"
+writefile.write(writestr)
