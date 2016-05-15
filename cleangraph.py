@@ -42,8 +42,6 @@ while(i < len(graph)):
                 del graph[i]
         else:
                 i+=1
-print(graph)
-print(gc)
 writestr = ""
 writefile = open("cleanedgraph.nwk","w")
 for i in range(len(graph)):

@@ -1,1 +1,2 @@
 *.nwk filter=lfs diff=lfs merge=lfs -text
+*.pcn filter=lfs diff=lfs merge=lfs -text
