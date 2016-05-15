@@ -11,8 +11,8 @@ while(len(graphtmp) != 0):
         index = 0
         currentcomponent.append(graphtmp[0][0])
         currentcomponenttmp = currentcomponent[:]
-        while(index < len(currentcomponent)):
-                if(currentcomponenttmp != currentcomponent):
+        while(index < len(currentcomponent) and currentcomponenttmp == currentcomponent):
+                if(currentcomponenttmp != currentcomponent and index >= len(currentcomponen)):
                         index = 0
                 i = 0
                 currentcomponenttmp = currentcomponent[:]
