@@ -3,28 +3,44 @@ def probdist(edge): #insert probability distribution function
         return random.random()
 def costdist(edge): #insert cost distribution function
         return random.random()
-def graphgen():#insert graph generation function
+def graphgen():#insert graph generation function which should append the cost and probabilities
         n = 1000
-        p = .5
+        p = .01
         graph = []
         for i in range(0,n):
                 for j in range(i+1,n):
                         if (random.random() < p): 
                                 graph.append((i,j,probdist((i,j)),costdist((i,j))))
         return graph
-def acyclic(graph):
+#def acyclic(graph):
 #this should remove cycles from the graph, probably easiest to do by ensuring that all destinations are less than origins
 def removezero(graph):
 #now I will compute all of the degrees of vertices
+        maxval = 0
+        for edge in graph:
+                if edge[1] > maxval:
+                        maxval = edge[1]
         degs = [0] * (maxval+1)
-        for i in graph:
-                degs[i[0]] += 1
-                degs[i[1]] += 1
+        for edge in graph:
+                degs[edge[0]] += 1
+                degs[edge[1]] += 1
         #now go through the degrees, and rewire to lower numbers when zero 
+        newindices = {}
+        zerodegs = []
+        for index,val in enumerate(degs):#create a dictionary mapping current locations to desired new locations
+                if val == 0:
+                        zerodegs.append(index)
+                elif len(zerodegs) == 0:
+                        newindices[index] = index
+                else:
+                        newindices[index] = zerodegs.pop(0)
+                        zerodegs.append(index)
+        for index,edge in enumerate(graph):
+                graph[index] = (newindices[edge[0]],newindices[edge[1]],edge[2],edge[3])
         return graph
         #this function should reduce the graph to remove disconnected edges 
 graph = graphgen()
-print("GRAPH GENERATED, n = " + len(graph))
+print("GRAPH GENERATED, E = " + str(len(graph)))
 graphtmp = graph[:]
 components = []
 currentcomponent = []
@@ -64,3 +80,5 @@ while(i < len(graph)):#delete all vertices not in the gc
         else:
                 i+=1
 graph = removezero(graph)
+print("GC isolated, E = " + str(len(graph)))
+
