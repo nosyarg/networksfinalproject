@@ -2,29 +2,6 @@
 #GRAYSON YORK, LUKE ZELLER, MATTHEW ZHENG, JUNMO RYANG
 #5/25/2016
 import random
-def uselessfunctionthatIwanttokeep():
-        indegs = indeg(graph)
-        for index,val in enumerate(indegs):
-                if val == 0: #cut sources
-                        j = 0 
-                        while j<len(graph):
-                                current = graph[j]
-                                if((current[0] == index or current[1] == index) and not (current[1] in exempt or current[0] in exempt)):
-                                        del graph[j]
-                                        print("srcrm")
-                                else:
-                                        j+=1
-        outdegs = outdeg(graph)
-        for index,val in enumerate(outdegs):
-                if val == 0: #cut sinks
-                        j = 0 
-                        while j<len(graph):
-                                current = graph[j]
-                                if((current[0] == index or current[1] == index) and not (current[1] in exempt or current[0] in exempt)):
-                                        del graph[j]
-                                        print("snkrm")
-                                else:
-                                        j+=1
 def maxnum(graph):
         maxval = 0
         for edge in graph:
@@ -65,8 +42,6 @@ def graphgen():#insert graph generation function which should append the cost an
                 for j in range(i+1,n):
                         if (random.random() < p): 
                                 graph.append((i,j,probdist((i,j)),costdist((i,j))))
-        print(graph)
-        print(degree(graph))
         return graph
 def acyclic(graph):
         return graph
@@ -98,7 +73,6 @@ def cutirrelevant(graph,exempt):
                                 if((current[0] == index or current[1] == index) and not (current[1] in exempt or current[0] in exempt)):
                                         del graph[j]
                                         j = len(graph)
-                                        print("1rm")
                                 else:
                                         j+=1 #todo, cut out sink vertices and source vertices and simplify degree 2's
         degs = degree(graph)
@@ -121,13 +95,9 @@ def cutirrelevant(graph,exempt):
                                                         i = len(graph)
                                                         j = len(graph)
                                                         index = len(degs)
-                                                        print("2rm")
                                                 i += 1
                                 j += 1
                 index+=1
-#        print(degree(graph))
-#        print(indeg(graph))
-#        print(outdeg(graph))
         hasin = [0]*len(degree(graph))
         hasout = [0]*len(degree(graph))
         for val in graph:
@@ -197,7 +167,6 @@ while(i < len(graph)):
                 i += 1
 graph = removezero(graph)
 print("GC isolated, E = " + str(len(graph)))
-print(graph)
 graphtmp = []
 while(graph != graphtmp):#get rid of all the vertices we know we wont pass through
         graphtmp = graph[:]
@@ -205,5 +174,4 @@ while(graph != graphtmp):#get rid of all the vertices we know we wont pass throu
         end = maxnum(graph)
         graph = removezero(cutirrelevant(graph,[start,end]))
 print("Irrelevant vertices cut, E = " + str(len(graph)))
-print(graph)
 #now lets get into the code...
