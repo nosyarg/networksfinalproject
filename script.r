@@ -1,4 +1,4 @@
-data <- read.csv("writefile.csv")
+data <- rbind(read.csv("writefile.csv"),read.csv("junmo.csv"),read.csv("luke.csv"))
 attach(data)
 print(cor(prob,edge))
 #plot(y=prob,x=edge)
@@ -9,4 +9,6 @@ f <- function(x)
         mean(prob[edge == x])
 }
 lapply(nums,f) -> k
-plot(y=k,x=nums)
+jpeg('plot.jpg')
+plot(y = k,x = nums,main = "Probability of Successful Transmission V.S. Number of Edges", xlab = "Number of Edges", ylab = "Probability of Successful Transmission")
+dev.off()

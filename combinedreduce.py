@@ -116,7 +116,6 @@ def cutirrelevant(graph,exempt):
 writefile = open("writefile.csv","a")
 while(1):
         graph = graphgen()
-#        print("GRAPH GENERATED, E = " + str(len(graph)))
         graphtmp = graph[:]
         components = []
         currentcomponent = []
@@ -169,14 +168,12 @@ while(1):
                 else:
                         i += 1
         graph = removezero(graph)
-#        print("GC isolated, E = " + str(len(graph)))
         graphtmp = []
         while(graph != graphtmp):#get rid of all the vertices we know we wont pass through
                 graphtmp = graph[:]
                 start = 0
                 end = maxnum(graph)
                 graph = removezero(cutirrelevant(graph,[start,end]))
-#        print("Irrelevant vertices cut, E = " + str(len(graph)))
         #now lets get into the code...
         n = maxnum(graph)
         #graph.sort(key = lambda x:x[1])
@@ -185,5 +182,4 @@ while(1):
         for i in range(0,len(graph)):
                 current = graph[i]
                 probs[current[1]] *= (1 - (current[2] * (1 - float(probs[current[0]]))))
-#        print("PROBABILITY: " + str(probs[-1]))
         writefile.write(str(numvert)+ "," + str(len(graph)) + "," + str(1.0 - probs[-1]) + "\n")
