@@ -2,6 +2,7 @@
 #GRAYSON YORK, LUKE ZELLER, MATTHEW ZHENG, JUNMO RYANG
 #5/25/2016
 import random
+numvert = 100
 def maxnum(graph):
         maxval = 0
         for edge in graph:
@@ -35,7 +36,7 @@ def probdist(edge): #insert probability distribution function
 def costdist(edge): #insert cost distribution function
         return random.random()
 def graphgen():#insert graph generation function which should append the cost and probabilities
-        n = 1000
+        n = numvert
         p = .1
         graph = []
         for i in range(0,n):
@@ -112,66 +113,77 @@ def cutirrelevant(graph,exempt):
                         i+=1
         return graph
 #BEGIN PROGRAM
-graph = graphgen()
-print("GRAPH GENERATED, E = " + str(len(graph)))
-graphtmp = graph[:]
-components = []
-currentcomponent = []
-while(len(graphtmp) != 0):#this will loop over all the edges in graphtmp to cut out anything not in the GC 
-        index = 0 
-        currentcomponent.append(graphtmp[0][0]) #set current head vertex
-        currentcomponenttmp = currentcomponent[:] #create a snapshot of the current component for the purpose of checking if new things are added
-        while(index < len(currentcomponent) and currentcomponenttmp == currentcomponent):
-                if(currentcomponenttmp != currentcomponent and index >= len(currentcomponen)):
-                        index = 0  #reset the index when we add a new vertex, there is probably a faster way to do this, but this works relatively quickly
-                i = 0 
-                currentcomponenttmp = currentcomponent[:]
-                while(i < len(graphtmp)):
-                        currentedge = graphtmp[i]#figure out whether the edge is in the current component and if not add it and dispose of it from the main graph.
-                        if(currentedge[0] == currentcomponent[index] and not currentedge[1] in currentcomponent):
-                                currentcomponent.append(currentedge[1])
-                                del graphtmp[i]
-                        elif(currentedge[1] == currentcomponent[index] and not currentedge[0] in currentcomponent):
-                                currentcomponent.append(currentedge[0])
-                                del graphtmp[i]
-                        elif(currentedge[0] in currentcomponent and currentedge[1] in currentcomponent):
-                                del graphtmp[i]
-                        else:
-                                i += 1
-                index += 1
-        components.append(sorted(currentcomponent[:]))
-        currentcomponent = []
-lens = []
-for i in components:#find the length of each component
-        lens.append(len(i))
-gc = components[lens.index(max(lens))]#only take the component with the maximum length
-i = 0;
-while(i < len(graph)):#delete all vertices not in the gc
-        currentedge = graph[i]
-        if( not (currentedge[0] in gc or currentedge[1] in gc)):
-                del graph[i]
-        else:
-                i+=1
-graph = removezero(graph)
-vertinpath = [0]
-current = 0
-for i in graph:
-                if i[0] in vertinpath and not i[1] in vertinpath:
-                        vertinpath.append(i[1])
-i = 0
-while(i < len(graph)):
-        current = graph[i]
-        if not current[0] in vertinpath:
-                del graph[i]
-        else:
-                i += 1
-graph = removezero(graph)
-print("GC isolated, E = " + str(len(graph)))
-graphtmp = []
-while(graph != graphtmp):#get rid of all the vertices we know we wont pass through
+writefile = open("writefile.csv","a")
+while(1):
+        graph = graphgen()
+#        print("GRAPH GENERATED, E = " + str(len(graph)))
         graphtmp = graph[:]
-        start = 0
-        end = maxnum(graph)
-        graph = removezero(cutirrelevant(graph,[start,end]))
-print("Irrelevant vertices cut, E = " + str(len(graph)))
-#now lets get into the code...
+        components = []
+        currentcomponent = []
+        while(len(graphtmp) != 0):#this will loop over all the edges in graphtmp to cut out anything not in the GC 
+                index = 0 
+                currentcomponent.append(graphtmp[0][0]) #set current head vertex
+                currentcomponenttmp = currentcomponent[:] #create a snapshot of the current component for the purpose of checking if new things are added
+                while(index < len(currentcomponent) and currentcomponenttmp == currentcomponent):
+                        if(currentcomponenttmp != currentcomponent and index >= len(currentcomponen)):
+                                index = 0  #reset the index when we add a new vertex, there is probably a faster way to do this, but this works relatively quickly
+                        i = 0 
+                        currentcomponenttmp = currentcomponent[:]
+                        while(i < len(graphtmp)):
+                                currentedge = graphtmp[i]#figure out whether the edge is in the current component and if not add it and dispose of it from the main graph.
+                                if(currentedge[0] == currentcomponent[index] and not currentedge[1] in currentcomponent):
+                                        currentcomponent.append(currentedge[1])
+                                        del graphtmp[i]
+                                elif(currentedge[1] == currentcomponent[index] and not currentedge[0] in currentcomponent):
+                                        currentcomponent.append(currentedge[0])
+                                        del graphtmp[i]
+                                elif(currentedge[0] in currentcomponent and currentedge[1] in currentcomponent):
+                                        del graphtmp[i]
+                                else:
+                                        i += 1
+                        index += 1
+                components.append(sorted(currentcomponent[:]))
+                currentcomponent = []
+        lens = []
+        for i in components:#find the length of each component
+                lens.append(len(i))
+        gc = components[lens.index(max(lens))]#only take the component with the maximum length
+        i = 0;
+        while(i < len(graph)):#delete all vertices not in the gc
+                currentedge = graph[i]
+                if( not (currentedge[0] in gc or currentedge[1] in gc)):
+                        del graph[i]
+                else:
+                        i+=1
+        graph = removezero(graph)
+        vertinpath = [0]
+        current = 0
+        for i in graph:
+                        if i[0] in vertinpath and not i[1] in vertinpath:
+                                vertinpath.append(i[1])
+        i = 0
+        while(i < len(graph)):
+                current = graph[i]
+                if not current[0] in vertinpath:
+                        del graph[i]
+                else:
+                        i += 1
+        graph = removezero(graph)
+#        print("GC isolated, E = " + str(len(graph)))
+        graphtmp = []
+        while(graph != graphtmp):#get rid of all the vertices we know we wont pass through
+                graphtmp = graph[:]
+                start = 0
+                end = maxnum(graph)
+                graph = removezero(cutirrelevant(graph,[start,end]))
+#        print("Irrelevant vertices cut, E = " + str(len(graph)))
+        #now lets get into the code...
+        n = maxnum(graph)
+        #graph.sort(key = lambda x:x[1])
+        probs = [1]*(n+1)
+        probs[0] = 0
+        for i in range(0,len(graph)):
+                current = graph[i]
+                probs[current[1]] *= (1 - (current[2] * (1 - float(probs[current[0]]))))
+#        print("PROBABILITY: " + str(probs[-1]))
+        writefile.write(str(numvert)+ "," + str(len(graph)) + "," + str(1.0 - probs[-1]) + "\n")
